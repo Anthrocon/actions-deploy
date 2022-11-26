@@ -11,7 +11,7 @@ Intended for Anthrocon internal use, however may be useful elsewhere.
 Create a workflow in `.github/workflows` with:
 
 ```yaml
-name: Deploy
+name: Deploy Hugo site
 
 on:
   push:
@@ -20,11 +20,12 @@ on:
 
 jobs:
   call:
-    name: Call
-    runs-on: ubuntu-latest
-    steps:
-      - name: Build and deploy
-        uses: Anthrocon/actions-deploy/.github/workflows/deploy.yaml
+    permissions:
+      contents: read
+      id-token: write
+      pages: write
+    uses: Anthrocon/actions-deploy/.github/workflows/deploy.yaml@main
+    secrets: inherit
 ```
 
 ## Licence
