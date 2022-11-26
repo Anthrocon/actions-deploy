@@ -1,0 +1,97 @@
+name: Deploy Hugo site v3.0
+
+on:
+  workflow_call:
+    inputs:
+      cache:
+        description: "Enable caching of Hugo resources"
+        default: true
+        required: false
+        type: boolean
+
+      hugo-version:
+        description: "Specify Hugo generator version"
+        default: "0.106.0"
+        required: false
+        type: string
+
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    shell: bash
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          submodules: recursive
+
+      - name: Setup cache
+        if: ${{ inputs.cache }} == 'true' && github.ref == 'refs/heads/main'
+        uses: actions/cache@v3
+        with:
+          path: |
+            ${{ runner.temp }}/hugo.deb
+            /tmp/hugo_cache
+            ./resources
+          key: ${{ github.workflow }}-${{ inputs.hugo-version }}
+
+      - name: Install Hugo CLI
+        run: >
+          [[ -f ${{ runner.temp }}/hugo.deb ]]
+          || wget -O ${{ runner.temp }}/hugo.deb https://github.com/gohugoio/hugo/releases/download/v${{ inputs.hugo-version }}/hugo_extended_${{ inputs.hugo-version }}_linux-amd64.deb
+          && sudo dpkg -i ${{ runner.temp }}/hugo.deb
+
+      - name: Setup Pages
+        id: pages
+        uses: actions/configure-pages@v2
+        with:
+          enablement: false
+
+      - name: Build site
+        run: >
+          hugo
+          --baseURL "${{ steps.pages.outputs.base_url }}/"
+          --enableGitInfo
+          --gc
+          --minify
+          || {
+          rm -f ${{ runner.temp }}/hugo.deb;
+          rm -rf /tmp/hugo_cache/*;
+          rm -rf ./resources/*;
+          exit 1;
+          }
+
+      - name: Upload artifact
+        if: github.ref == 'refs/heads/main'
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: ./public
+    timeout-minutes: 10
+
+  deploy:
+    name: Deploy
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to Pages
+        id: deployment
+        if: github.ref == 'refs/heads/main'
+        uses: actions/deploy-pages@v1
+    timeout-minutes: 10
