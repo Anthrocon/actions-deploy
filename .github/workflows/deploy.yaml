@@ -4,14 +4,14 @@ on:
   workflow_call:
     inputs:
       cache:
-        description: "Enable caching of Hugo resources"
+        description: 'Enable caching of Hugo resources'
         default: true
         required: false
         type: boolean
 
       hugo-version:
-        description: "Specify Hugo generator version"
-        default: "0.106.0"
+        description: 'Specify Hugo generator version'
+        default: '0.107.0'
         required: false
         type: string
 
@@ -82,6 +82,7 @@ jobs:
         uses: actions/upload-pages-artifact@v1
         with:
           path: ./public
+
     timeout-minutes: 10
 
   deploy:
@@ -91,9 +92,11 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+
     steps:
       - name: Deploy to Pages
         id: deployment
         if: github.ref == 'refs/heads/main'
         uses: actions/deploy-pages@v1
+
     timeout-minutes: 10
