@@ -1,6 +1,8 @@
 # actions-deploy
 
-Action generates Hugo site, then deploys to GitHub Pages.
+[![Deploy Hugo site](https://github.com/Anthrocon/actions-deploy/actions/workflows/test.yaml/badge.svg)](https://github.com/Anthrocon/actions-deploy/actions/workflows/test.yaml)
+
+Action generates a Hugo site, then deploys it to GitHub Pages.
 
 ## Scope
 
@@ -11,12 +13,8 @@ Intended for Anthrocon internal use, however may be useful elsewhere.
 Create a workflow in `.github/workflows` with:
 
 ```yaml
-name: Deploy Hugo site
-
 on:
   push:
-    branches:
-      - main
 
 jobs:
   call:
@@ -24,8 +22,29 @@ jobs:
       contents: read
       id-token: write
       pages: write
+
     uses: Anthrocon/actions-deploy/.github/workflows/deploy.yaml@main
     secrets: inherit
+```
+
+### Specify Hugo version
+
+Recommended. Overrides action default, and prevents unexpected changes.
+
+```yaml
+uses: Anthrocon/actions-deploy/.github/workflows/deploy.yaml@main
+with:
+  hugo-version: '0.107.0'
+```
+
+### Disable cache
+
+By default, action caches Hugo package, build cache, and resources. Cache can be disabled for testing.
+
+```yaml
+uses: Anthrocon/actions-deploy/.github/workflows/deploy.yaml@main
+with:
+  cache: false
 ```
 
 ## Licence

@@ -20,5 +20,4 @@ jobs:
       pages: write
 
     uses: Anthrocon/actions-deploy/.github/workflows/deploy.yaml@main
-
     secrets: inherit
