@@ -1,0 +1,24 @@
+name: Deploy Hugo site
+
+on:
+  pull_request:
+    branches:
+      - main
+
+  push:
+    branches:
+      - main
+
+  workflow_dispatch:
+
+jobs:
+  call:
+    name: Call workflow
+    permissions:
+      contents: read
+      id-token: write
+      pages: write
+
+    uses: Anthrocon/actions-deploy/.github/workflows/deploy.yaml@main
+
+    secrets: inherit
