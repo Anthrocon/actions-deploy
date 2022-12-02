@@ -46,13 +46,14 @@ jobs:
           submodules: recursive
 
       - name: Setup cache
-        if: ${{ inputs.cache }} == 'true' && github.ref == 'refs/heads/main'
+        if: inputs.cache == 'true' && github.ref == 'refs/heads/main'
         uses: actions/cache@v3
         with:
           path: |
             ${{ runner.temp }}/hugo.deb
             /tmp/hugo_cache
             ./resources
+
           key: ${{ github.workflow }}-${{ env.VERSION }}-${{ inputs.hugo-version }}-${{ github.run_id }}
           restore-keys: |
             ${{ github.workflow }}-${{ env.VERSION }}-${{ inputs.hugo-version }}-
