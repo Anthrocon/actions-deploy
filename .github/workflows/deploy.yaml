@@ -1,5 +1,3 @@
-name: Deploy Hugo site v3.0
-
 on:
   workflow_call:
     inputs:
@@ -17,10 +15,8 @@ on:
 
   workflow_dispatch:
 
-permissions:
-  contents: read
-  id-token: write
-  pages: write
+env:
+  VERSION: '4.0'
 
 defaults:
   run:
@@ -31,9 +27,17 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build:
-    name: Build
+  deploy:
+    name: Deploy
+    permissions:
+      id-token: write
+      pages: write
+
     runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -49,7 +53,9 @@ jobs:
             ${{ runner.temp }}/hugo.deb
             /tmp/hugo_cache
             ./resources
-          key: ${{ github.workflow }}-${{ inputs.hugo-version }}
+          key: ${{ github.workflow }}-${{ env.VERSION }}-${{ inputs.hugo-version }}-${{ github.run_id }}
+          restore-keys: |
+            ${{ github.workflow }}-${{ env.VERSION }}-${{ inputs.hugo-version }}-
 
       - name: Install Hugo CLI
         run: >
@@ -83,17 +89,6 @@ jobs:
         with:
           path: ./public
 
-    timeout-minutes: 10
-
-  deploy:
-    name: Deploy
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-
-    steps:
       - name: Deploy to Pages
         id: deployment
         if: github.ref == 'refs/heads/main'
