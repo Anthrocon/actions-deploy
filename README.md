@@ -18,13 +18,7 @@ on:
 
 jobs:
   call:
-    permissions:
-      contents: read
-      id-token: write
-      pages: write
-
     uses: Anthrocon/actions-deploy/.github/workflows/deploy.yaml@main
-    secrets: inherit
 ```
 
 ### Specify Hugo version
@@ -47,6 +41,6 @@ with:
   cache: false
 ```
 
-## Licence
+## License
 
-No licence implied. All rights reserved copyright Anthrocon, Inc., 2022.
+No license implied. All rights reserved copyright Anthrocon, Inc., 2022.
