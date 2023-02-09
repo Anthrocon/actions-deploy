@@ -28,7 +28,7 @@ Recommended. Overrides action default, and prevents unexpected changes.
 ```yaml
 uses: Anthrocon/actions-deploy/.github/workflows/deploy.yaml@main
 with:
-  hugo-version: '0.107.0'
+  hugo-version: '0.110.0'
 ```
 
 ### Disable cache
@@ -43,4 +43,4 @@ with:
 
 ## License
 
-No license implied. All rights reserved copyright Anthrocon, Inc., 2022.
+No license implied. All rights reserved copyright Anthrocon, Inc., 2023.
