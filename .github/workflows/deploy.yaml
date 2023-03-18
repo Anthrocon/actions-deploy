@@ -9,7 +9,7 @@ on:
 
       hugo-version:
         description: 'Specify Hugo generator version'
-        default: '0.111.0'
+        default: '0.111.3'
         required: false
         type: string
 
