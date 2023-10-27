@@ -2,7 +2,7 @@
 
 [![Deploy Hugo site](https://github.com/Anthrocon/actions-deploy/actions/workflows/test.yaml/badge.svg)](https://github.com/Anthrocon/actions-deploy/actions/workflows/test.yaml)
 
-Action generates a Hugo site, then deploys it to GitHub Pages.
+Action generates a Hugo site from `main` branch, then deploys it to GitHub Pages.
 
 ## Scope
 
@@ -28,7 +28,7 @@ Recommended. Overrides action default, and prevents unexpected changes.
 ```yaml
 uses: Anthrocon/actions-deploy/.github/workflows/deploy.yaml@main
 with:
-  hugo-version: '0.112.5'
+  hugo-version: '0.119.0'
 ```
 
 ### Disable cache

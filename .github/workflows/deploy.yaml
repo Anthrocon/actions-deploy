@@ -9,14 +9,14 @@ on:
 
       hugo-version:
         description: 'Specify Hugo generator version'
-        default: '0.112.5'
-        required: false
+        default: '0.119.0'
+        required: true
         type: string
 
   workflow_dispatch:
 
 env:
-  VERSION: '4.1'
+  VERSION: '4.2'
 
 defaults:
   run:
@@ -40,23 +40,23 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
           submodules: recursive
 
       - name: Setup cache
-        if: ${{ inputs.cache }} == 'true' && github.ref == 'refs/heads/main'
+        if: ${{ inputs.cache }} == 'true'
         uses: actions/cache@v3
         with:
           path: |
             ${{ runner.temp }}/hugo.deb
-            /tmp/hugo_cache
+            ${{ runner.temp }}/hugo_cache
             ./resources
 
-          key: ${{ github.workflow }}-${{ env.VERSION }}-${{ inputs.hugo-version }}-${{ github.run_id }}
+          key: ${{ github.workflow }}-${{ github.ref }}-${{ env.VERSION }}-${{ inputs.hugo-version }}-${{ github.run_id }}
           restore-keys: |
-            ${{ github.workflow }}-${{ env.VERSION }}-${{ inputs.hugo-version }}-
+            ${{ github.workflow }}-${{ github.ref }}-${{ env.VERSION }}-${{ inputs.hugo-version }}-
 
       - name: Install Hugo CLI
         run: >
@@ -72,19 +72,20 @@ jobs:
         run: >
           hugo
           --baseURL "${{ steps.pages.outputs.base_url }}/"
+          --cacheDir ${{ runner.temp }}/hugo_cache
           --enableGitInfo
           --gc
           --minify
 
       - name: Upload artifact
         if: github.ref == 'refs/heads/main'
-        uses: actions/upload-pages-artifact@v1
+        uses: actions/upload-pages-artifact@v2
         with:
           path: ./public
 
       - name: Deploy to Pages
         id: deployment
         if: github.ref == 'refs/heads/main'
-        uses: actions/deploy-pages@v1
+        uses: actions/deploy-pages@v2
 
     timeout-minutes: 10
