@@ -9,7 +9,7 @@ on:
 
       hugo-version:
         description: 'Specify Hugo generator version'
-        default: '0.119.0'
+        default: '0.131.0'
         required: false
         type: string
 
@@ -88,4 +88,4 @@ jobs:
         if: github.ref == 'refs/heads/main'
         uses: actions/deploy-pages@v2
 
-    timeout-minutes: 10
+    timeout-minutes: 30
