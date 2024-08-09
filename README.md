@@ -31,6 +31,16 @@ with:
   hugo-version: '0.131.0'
 ```
 
+### Rewrite HTTPS
+
+Action reads base URL from GitHub Pages. Scheme can be overridden to HTTPS.
+
+```yaml
+uses: Anthrocon/actions-deploy/.github/workflows/deploy.yaml@main
+with:
+  enforce-https: true
+```
+
 ### Disable cache
 
 By default, action caches Hugo package, build cache, and resources. Cache can be disabled for testing.
