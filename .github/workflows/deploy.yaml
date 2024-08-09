@@ -54,7 +54,7 @@ jobs:
         timeout-minutes: 5
 
       - name: Setup cache
-        if: ${{ inputs.cache }} == 'true'
+        if: inputs.cache
         uses: actions/cache@v4
         with:
           path: |
@@ -84,7 +84,7 @@ jobs:
       - name: Build site
         run: >
           hugo
-          --baseURL "${{ inputs.enforce-https == 'true' && format('https://{0}{1}', steps.pages.outputs.host, steps.pages.outputs.base_path) || steps.pages.outputs.base_url }}/"
+          --baseURL "${{ inputs.enforce-https && format('https://{0}{1}', steps.pages.outputs.host, steps.pages.outputs.base_path) || steps.pages.outputs.base_url }}/"
           --cacheDir ${{ runner.temp }}/hugo_cache
           --enableGitInfo
           --gc
