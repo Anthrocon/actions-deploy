@@ -28,7 +28,7 @@ Recommended. Overrides action default, and prevents unexpected changes.
 ```yaml
 uses: Anthrocon/actions-deploy/.github/workflows/deploy.yaml@main
 with:
-  hugo-version: '0.131.0'
+  hugo-version: '0.163.1'
 ```
 
 ### Rewrite HTTPS
@@ -53,4 +53,4 @@ with:
 
 ## License
 
-No license implied. All rights reserved copyright Anthrocon, Inc., 2023.
+No license implied. All rights reserved copyright Anthrocon, Inc., 2026.

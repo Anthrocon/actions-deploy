@@ -1,4 +1,4 @@
 baseURL: "/"
-languageCode: "en-US"
-title: "actions-deploy"
+locale: "en-US"
 theme: "blank"
+title: "actions-deploy"
